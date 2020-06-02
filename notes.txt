@@ -1,0 +1,21 @@
+server
+    database
+        users
+        records, leaderboards
+    handle requests
+        login
+        create user
+        add score
+        get all scores
+        anything multiplayer
+client
+    start menu
+        login
+        create a user
+        start a local game
+        start a multiplayer game
+        close game
+    game
+        take a turn
+        quit at any time
+    intercept ^C 
