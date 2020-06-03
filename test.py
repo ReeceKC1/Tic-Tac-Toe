@@ -1,5 +1,5 @@
 from client.game import Game
-from objects.player import *
+from client.player import *
 
 
 player1 = LocalPlayer()

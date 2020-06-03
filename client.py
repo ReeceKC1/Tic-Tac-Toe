@@ -1,9 +1,11 @@
 from client.board import Board
 from client.game import Game
-from objects.player import Player
+from client.player import Player
 import sys
+import os
 
 user = None
+error_message = ""
 
 # A switch value for console input
 # @value the input from console
@@ -14,10 +16,8 @@ def switch(value):
         return {
             '1': lambda : login(),
             '2': lambda : signup(),
-            '3': lambda : print("You must be logged in to play"),
-            '4': lambda : print("You must be logged in to play"),
-            '5': lambda : show_leaderboards(),
-            '6': lambda : exit()
+            '3': lambda : show_leaderboards(),
+            '4': lambda : exit()
         }.get(value)()
     # If the user is logged in
     else:
@@ -65,21 +65,19 @@ def exit():
     sys.exit()
 
 while True:
-    # 1,2,5 outputs to server.
-    # 3 outputs to client.
-    # 4 outputs to server.
-    # 6 exits the game.
+    # Clearing console
+    os.system('cls')
+    os.system('clear')
+    # Printing out menu for players
     if not user:
         input_value = input("""
 Hello guest, welcome to Connect 4!
 Please select an option below:
 1. Login
 2. Signup
-3. Play local
-4. Play Global (Must be logged in)
-5. Show Leaderboards
-6. Exit
-        """)
+3. Show Leaderboards
+4. Exit
+""" + error_message)
     else:
         input_value = input(f"""
 Hello, {user.name}, welcome to Connect 4!
@@ -88,8 +86,10 @@ Please select an option below:
 2. Play Global
 3. Show Leaderboards
 4. Exit
-        """) 
+""" + error_message) 
+    # Interpreting input and handling errors
     try:
         switch(input_value)
-    except:
-        print("Invalid option, please try again")
+        error_message = ""
+    except Exception as e:
+        error_message = "***Invalid option, please try again***"
