@@ -49,13 +49,18 @@ class Board:
         self.active_tokens = []
 
     def check_win(self):
+        # Checks win only if pieces are present.
         if self.active_tokens:
+            # at is the last token played.
             at = self.active_tokens[-1]
+            # Creates a box around at that consists of active_tokens around point at 
+            # with radius self.connect 
             box = [x for x in self.active_tokens if ((x.row > at.row - self.connect and x.column < at.column + self.connect) or \
                 (x.row > at.row - self.connect and x.column > at.column - self.connect) or \
                 (x.row < at.row + self.connect and x.column < at.column + self.connect) or \
                 (x.row < at.row + self.connect and x.column > at.column - self.connect)) and x.player == at.player]
-
+            # Box is passed to each win condition, check around last token placed.
+            # Returns true if a win is found. Checks these conditions sequentially.
             if self.win_horizontal(box):
                 return True
             if self.win_vertical(box):
@@ -106,52 +111,31 @@ class Board:
         return False
 
     def win_diagonal(self, box):
-        # r | c
-        # - | +
-        # - | -
-        # + | +
-        # + | - 
-
-        # row - connect <= row <= row + connect
-
-
-        # all tokens from player within range row and column +- self.connect
-        # Take box of certain area. If box isnt a certain size, then dont check this condition. Must have at least self.connect tokens    
-
+        # Check to make sure a sufficient amount of tokens exist
         if len(box) < self.connect:
             return False
-
-        # Could maybe just remove the areas of the box that aren't diagnols. 
-        # Then specify player and see what exists and try to make a consecutive
-        # Diagonal out of it
-
-        # start with count at 0
-        # every time we find a token that exists, count += 1
-        # if it doesn't exist, set count to 0
-
-        # lower left = token.row - self.connect + 1 and token.column - self.connect + 1
-        # lower right = token.row - self.connect + 1 and token.column + self.connect - 1
-
-        # from lower left, add 1 to row and column
-        # from lower right, add 1 to row and subtract 1 from column 
-
+            
         # Lower left calculation
         count = 0
         temp_row = self.active_tokens[-1].row - self.connect + 1
         temp_column = self.active_tokens[-1].column - self.connect + 1
-        
+        # For items in the diagonal line, check there existence
         for i in range(2 * self.connect - 1):
             hit = False
             for j in box:
                 if j.row == temp_row and j.column == temp_column:
                     hit = True
-                    break 
+                    break
+            # Increment if exist
             if hit:
                 count += 1
+            # Reset if non-existant
             else:
                 count = 0
+            # Checking if connected
             if count == self.connect:
                 return True
+            # Moving to next point
             temp_row += 1
             temp_column += 1
 
@@ -159,19 +143,23 @@ class Board:
         count = 0
         temp_row = self.active_tokens[-1].row - self.connect + 1
         temp_column = self.active_tokens[-1].column + self.connect - 1
-
+        # For items in the diagonal line, check there existence
         for i in range(2 * self.connect - 1):
             hit = False
             for j in box:
                 if j.row == temp_row and j.column == temp_column:
                     hit = True
                     break 
+            # Increment if exist
             if hit:
                 count += 1
+            # Reset if non-existant
             else:
                 count = 0
+            # Checking if connected
             if count == self.connect:
                 return True
+            # Moving to next point
             temp_row += 1
             temp_column -= 1
 
