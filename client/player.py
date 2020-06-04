@@ -9,6 +9,9 @@ class Player:
 
 # Local Player using the command line
 class LocalPlayer(Player):
+    # Constructor
+    def __init__(self, name = "Guest"):
+        self.name = name
     # Prompts a console input
     def prompt(self, text):
         return input(text)
