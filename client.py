@@ -3,6 +3,8 @@ from client.game import Game
 from client.player import *
 import sys
 import os
+from client.api import *
+from getpass import getpass
 
 user = None
 error_message = ""
@@ -32,25 +34,26 @@ def switch(value):
         }.get(value)()
 
 def login():
-    # Takes input from user.
-    # Check playerbase to see if name in playerbase. Break if not found
-    # If found, return, "Player Found"
-    # Ask for password. If successful, print "Logged into player name"
-    # If not found loop again. Max number of tries.
-    # @return to main menu.
-    print("In the login function")
+    global user
+    username = ""
+    print("Please enter your credentials to login")
+    while (response := login_api(username := input("Username: "), getpass("Password: "))):
+        print(f"Error: {response}")
+    print("Successfully logged in")
+    user = LocalPlayer(username)
 
 def logout():
+    global user
     user = None
 
 def signup():
-    # Takes an input from user. 
-    # If input is in playerbase, print "Name has already been taken."
-    # If input is not in playerbase, ask user to input password with.an
-    # Ask player to confirm password.
-    # If valid, print, "Player name has been added to leaderbase."
-    # @return to main menu.
+    global user
     print("in signup")
+    print("Please enter a username and password to signup.")
+    while (response := signup_api(username := input("Username: "), getpass("Password: "))):
+        print(f"Error: {response}")
+    print("Successfully signed up.")
+    user = LocalPlayer(username)
 
 def play_local_pvp():
     # Launches an instance of the game.
@@ -79,9 +82,10 @@ def exit():
 
 while True:
     # Clearing console
-    os.system('cls')
-    os.system('clear')
+    # os.system('cls')
+    # os.system('clear')
     # Printing out menu for players
+    print(user)
     if not user:
         input_value = input("""
 Hello guest, welcome to Connect 4!
@@ -94,7 +98,7 @@ Please select an option below:
 """ + error_message)
     else:
         input_value = input(f"""
-Hello, {user.name}, welcome to Connect 4!
+Hello, {user}, welcome to Connect 4!
 Please select an option below:
 1. Play local PvAI
 2. Play local PvP
