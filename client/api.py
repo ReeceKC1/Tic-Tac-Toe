@@ -31,7 +31,15 @@ def signup_api(username, password):
     return ''
 
 def get_leaderboard_api():
-    pass
+    response = requests.get(f"{SERVER_ADDRESS}/c4/leaderboard", json={
+        'offset': 0
+    })
+    if response.status_code == 400:
+        print(response.json().get('error'))
+    return response.json().get('leaderboard')
 
-def post_record_api():
-    pass
+def post_record_api(winner, loser):
+    response = requests.post(f"{SERVER_ADDRESS}/c4/leaderboard", json={
+        'winner': winner.name,
+        'loser': loser.name
+    })

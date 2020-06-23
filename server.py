@@ -86,12 +86,12 @@ def leaderboard():
             offset = request.json.get('offset')
             # Querying for list of players with their amount of wins sorted in descending order
             leaders = session.execute(text(f"SELECT winner, COUNT(winner) \
-                                            FROM record \
-                                            GROUP BY winner \
-                                            ORDER BY 2 DESC \
-                                            LIMIT {RECORD_LIMIT} OFFSET {offset}")).fetchall()
-            leaders = [Record(**x).serialize for x in leaders]
-            return jsonify({'leaderboard': leaders})
+                FROM record \
+                GROUP BY winner \
+                ORDER BY 2 DESC \
+                LIMIT {RECORD_LIMIT} OFFSET {offset}")).fetchall()
+            leaders = [list(leader) for leader in leaders]
+            return jsonify({'leaderboard': leaders}), 200
         elif request.method == 'POST':
             winner = request.json.get('winner')
             loser = request.json.get('loser')

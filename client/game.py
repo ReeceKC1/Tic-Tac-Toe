@@ -1,6 +1,6 @@
 from client.board import Board
 import random 
-
+from client.api import post_record_api
 
 class Game:
     # Needs to handle the players turn
@@ -67,5 +67,7 @@ class Game:
                     error_message = f"\nError: {e} Please select a new column"
             # Incrementing current play counter
             turn_count += 1
+        # send msg to server with player
+        post_record_api(player, self.player2 if player == self.player1 else self.player1)
         self.player1.prompt(f"{self.gameboard}\n{player} wins! Press any key to continue.")
         self.player2.prompt(f"{self.gameboard}\n{player} wins! Press any key to continue.")

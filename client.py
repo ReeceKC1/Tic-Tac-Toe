@@ -70,11 +70,20 @@ def play_local_pvai():
 
 def play_global():
     # Connects to server, looks for another player to match to.
+    game = Game(user, RemotePlayer())
+    game.start()
+
     pass
 
+"""
+[('Jeff', 2), ('Jim', 1)]
+"""
 def show_leaderboards():
     # query server
-    pass
+    current_leaderboard = get_leaderboard_api()
+    for match in current_leaderboard:
+        print(f"{match[0]}: {match[1]} wins.")
+
 
 def exit():
     # Either exit in single player, or send a message if multiplayer.
@@ -85,7 +94,6 @@ while True:
     # os.system('cls')
     # os.system('clear')
     # Printing out menu for players
-    print(user)
     if not user:
         input_value = input("""
 Hello guest, welcome to Connect 4!
